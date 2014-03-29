@@ -20,4 +20,29 @@ instance (Num a) => Num (Stream a) where
  signum xs = fmap signum xs
  fromInteger z = constant $ fromInteger z
 
+instance (Fractional a) => Fractional (Stream a) where
+ xs / ys = combine (/) xs ys
+ recip xs = fmap recip xs
+ fromRational r = constant $ fromRational r
+
+instance (Floating a) => Floating (Stream a) where
+ pi = constant pi
+ exp xs = fmap exp xs
+ sqrt xs = fmap sqrt xs
+ log xs = fmap log xs
+ xs ** ys = combine (**) xs ys
+ logBase xs ys = combine logBase xs ys
+ sin xs = fmap sin xs
+ cos xs = fmap cos xs
+ tan xs = fmap tan xs
+ asin xs = fmap asin xs
+ acos xs = fmap acos xs
+ atan xs = fmap atan xs
+ sinh xs = fmap sinh xs
+ cosh xs = fmap cosh xs
+ tanh xs = fmap tanh xs
+ asinh xs = fmap asinh xs
+ acosh xs = fmap acosh xs
+ atanh xs = fmap atanh xs
+
 main = print "prototype"
