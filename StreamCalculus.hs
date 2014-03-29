@@ -44,4 +44,7 @@ instance (Floating a) => Floating (Stream a) where
  acosh xs = acosh <$> xs
  atanh xs = atanh <$> xs
 
+streamAt 0 xs = front xs
+streamAt n xs = streamAt (n - 1) (derivative xs)
+
 main = print "prototype"
