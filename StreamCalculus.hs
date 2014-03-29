@@ -47,4 +47,9 @@ instance (Floating a) => Floating (Stream a) where
 streamAt 0 xs = front xs
 streamAt n xs = streamAt (n - 1) (derivative xs)
 
+merge xs ys = Stream (front xs) (merge ys xs)
+
+recurse f x = s where
+ s = Stream x (f <$> s)
+
 main = print "prototype"
