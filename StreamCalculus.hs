@@ -52,4 +52,12 @@ merge xs ys = Stream (front xs) (merge ys xs)
 recurse f x = s where
  s = Stream x (f <$> s)
 
+conv xs ys = Stream (front xs * (front ys)) ((conv (derivative xs) ys) + (conv (fromInteger $ front xs) (derivative ys)))
+
+takeN 0 xs = []
+takeN n xs = (front xs) : (takeN (n-1) (derivative xs))
+
+dropN 0 xs = xs
+dropN n xs = dropN (n - 1) (derivative xs)
+
 main = print "prototype"
