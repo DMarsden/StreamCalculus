@@ -9,8 +9,14 @@ streamAt :: Integer -> (Stream a) -> a
 streamAt 0 xs = front xs
 streamAt n xs = streamAt (n - 1) (derivative xs)
 
-merge :: (Stream a) -> (Stream a) -> (Stream a)
+merge :: Stream a -> Stream a -> Stream a
 merge xs ys = Stream (front xs) (merge ys xs)
+
+evens :: Stream a -> Stream a
+evens xs = Stream (front xs) (derivative $ derivative xs)
+
+odds :: Stream a -> Stream a
+odds = evens . derivative
 
 takeN :: Integer -> Stream a -> [a]
 takeN 0 xs = []
