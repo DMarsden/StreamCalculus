@@ -2,7 +2,7 @@ module Data.Stream.Rutten where
 
 import Data.Stream.Core
 
-embed :: (Num a) => a -> (Stream a)
+embed :: (Num a) => a -> Stream a
 embed z = Stream z (embed 0)
 
 x = Stream 0 (embed 1)
@@ -14,9 +14,17 @@ xs |*| ys = Stream (front xs * (front ys)) (((derivative xs) |*| ys) + ((embed $
 
 infixl 7 |*|
 
+(|/|) :: (Fractional a) => Stream a -> Stream a -> Stream a
+xs |/| ys = xs |*| inv ys
+
+infixl 7 |/|
+
 (|**|) :: (Num a) => Stream a -> Integer -> Stream a
 xs |**| 0 = fromInteger 1
 xs |**| n = xs |*| (xs |**| (n - 1))
+
+inv :: (Fractional a) => (Stream a) -> (Stream a)
+inv xs = Stream (recip $ front xs) ((embed (-front xs)) |*| (derivative xs |*| inv xs))
 
 infixr 8 |**|
 
