@@ -1,6 +1,7 @@
-module Data.Stream.Core where
+module Data.Stream.Core  where
 
 import Data.List
+import Test.QuickCheck
 
 data Stream a = Stream { front :: a, derivative :: (Stream a) }
 
@@ -24,3 +25,12 @@ instance Functor Stream where
 
 instance (Show a) => Show (Stream a) where
  show xs = "[" ++ (concat $ intersperse ", " $ map show $ takeN 5 xs) ++ ", ..."
+
+testStream x y z = Stream x (Stream y (Stream z $ testStream x y z))
+
+instance (Arbitrary a) => Arbitrary (Stream a) where
+ arbitrary = do
+              x <- arbitrary
+              y <- arbitrary
+              z <- arbitrary
+              return $ testStream x y z
