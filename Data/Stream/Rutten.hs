@@ -19,6 +19,11 @@ xs |/| ys = xs |*| inv ys
 
 infixl 7 |/|
 
+(|.|) :: (Num a) => Stream a -> Stream a -> Stream a
+xs |.| ys = Stream (front xs) (derivative ys |*| (derivative xs |.| ys))
+
+infixr 9 |.|
+
 (|**|) :: (Num a) => Stream a -> Integer -> Stream a
 xs |**| 0 = fromInteger 1
 xs |**| n = xs |*| (xs |**| (n - 1))
