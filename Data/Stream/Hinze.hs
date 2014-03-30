@@ -1,11 +1,7 @@
-module Main where
+module Data.Stream.Hinze where
 
+import Data.Stream.Core
 import Control.Applicative
-
-data Stream a = Stream { front :: a,  derivative :: (Stream a) }
-
-instance Functor Stream where
- fmap f xs = Stream (f $ front xs) (fmap f (derivative xs))
 
 instance Applicative Stream where
  pure x = Stream x (pure x)
@@ -44,20 +40,5 @@ instance (Floating a) => Floating (Stream a) where
  acosh xs = acosh <$> xs
  atanh xs = atanh <$> xs
 
-streamAt 0 xs = front xs
-streamAt n xs = streamAt (n - 1) (derivative xs)
-
-merge xs ys = Stream (front xs) (merge ys xs)
-
 recurse f x = s where
  s = Stream x (f <$> s)
-
-conv xs ys = Stream (front xs * (front ys)) ((conv (derivative xs) ys) + (conv (fromInteger $ front xs) (derivative ys)))
-
-takeN 0 xs = []
-takeN n xs = (front xs) : (takeN (n-1) (derivative xs))
-
-dropN 0 xs = xs
-dropN n xs = dropN (n - 1) (derivative xs)
-
-main = print "prototype"
