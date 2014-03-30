@@ -12,9 +12,13 @@ combine f xs ys = Stream (f (front xs) (front ys)) (combine f (derivative xs) (d
 (|*|) :: (Num a) => Stream a -> Stream a -> Stream a
 xs |*| ys = Stream (front xs * (front ys)) (((derivative xs) |*| ys) + ((embed $ front xs) |*| (derivative ys)))
 
+infixl 7 |*|
+
 (|**|) :: (Num a) => Stream a -> Integer -> Stream a
 xs |**| 0 = fromInteger 1
 xs |**| n = xs |*| (xs |**| (n - 1))
+
+infixr 8 |**|
 
 -- We do pointwise operations for these, will handle
 -- special cases such as stream multiplication and exp
