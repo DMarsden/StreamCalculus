@@ -1,5 +1,7 @@
 module Data.Stream.Core where
 
+import Data.List
+
 data Stream a = Stream { front :: a, derivative :: (Stream a) }
 
 streamAt :: Integer -> (Stream a) -> a
@@ -19,3 +21,6 @@ dropN n xs = dropN (n - 1) (derivative xs)
 
 instance Functor Stream where
  fmap f xs = Stream (f $ front xs) (fmap f $ derivative xs)
+
+instance (Show a) => Show (Stream a) where
+ show xs = "[" ++ (concat $ intersperse ", " $ map show $ takeN 5 xs) ++ ", ..."
