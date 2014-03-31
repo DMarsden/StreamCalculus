@@ -19,3 +19,9 @@ prop_evenMerge xs ys = all (test $ evens $ merge xs ys) [0..100]
 prop_oddMerge xs ys = all (test $ odds $ merge xs ys) [0..100]
  where
   test zs n = streamAt n zs == streamAt n ys
+
+nats = Stream 0 (fmap (+1) nats)
+
+prop_dropN_remaining = all test [0..100]
+ where
+  test n = streamAt 0 (dropN n nats) == n
