@@ -22,6 +22,14 @@ prop_oddMerge xs ys = all (test $ odds $ merge xs ys) [0..100]
 
 nats = Stream 0 (fmap (+1) nats)
 
+prop_streamAt_nats = all test [0..100]
+ where
+  test n = streamAt n nats == n
+
 prop_dropN_remaining = all test [0..100]
  where
   test n = streamAt 0 (dropN n nats) == n
+
+prop_fmap n = all test [0..100]
+ where
+  test m = streamAt m (fmap (+n) nats) == n + m
