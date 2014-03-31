@@ -10,10 +10,10 @@ streamAt 0 xs = front xs
 streamAt n xs = streamAt (n - 1) (derivative xs)
 
 merge :: Stream a -> Stream a -> Stream a
-merge xs ys = Stream (front xs) (merge ys xs)
+merge xs ys = Stream (front xs) (merge ys (derivative xs))
 
 evens :: Stream a -> Stream a
-evens xs = Stream (front xs) (derivative $ derivative xs)
+evens xs = Stream (front xs) (evens $ derivative $ derivative xs)
 
 odds :: Stream a -> Stream a
 odds = evens . derivative
@@ -25,6 +25,9 @@ takeN n xs = (front xs) : (takeN (n-1) (derivative xs))
 dropN :: Integer -> (Stream a) -> (Stream a)
 dropN 0 xs = xs
 dropN n xs = dropN (n - 1) (derivative xs)
+
+constant :: a -> Stream a
+constant x = Stream x (constant x)
 
 instance Functor Stream where
  fmap f xs = Stream (f $ front xs) (fmap f $ derivative xs)
