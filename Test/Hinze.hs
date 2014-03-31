@@ -7,6 +7,8 @@ import Test.Framework.Providers.QuickCheck2
 import Data.Stream.Core
 import Data.Stream.Hinze
 import Control.Applicative
+import Control.Monad
+import Control.Comonad
 
 propPlusCommutative :: Stream Int -> Stream Int -> Bool
 propPlusCommutative xs ys = (xs + ys) `eq` (ys + xs)

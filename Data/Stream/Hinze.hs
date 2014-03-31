@@ -2,6 +2,18 @@ module Data.Stream.Hinze where
 
 import Data.Stream.Core
 import Control.Applicative
+import Control.Monad
+import Control.Comonad
+
+instance Monad Stream where
+  return = constant
+  xs >>= f = join (fmap f xs)
+    where
+      join ~(Stream xs xss) = Stream (front xs) (join (fmap derivative xss))
+
+instance Comonad Stream where
+ extract = front
+ extend f xs = Stream (f xs) (extend f $ derivative xs)
 
 instance Applicative Stream where
  pure x = Stream x (pure x)
@@ -40,5 +52,4 @@ instance (Floating a) => Floating (Stream a) where
  acosh xs = acosh <$> xs
  atanh xs = atanh <$> xs
 
-recurse f x = s where
- s = Stream x (f <$> s)
+

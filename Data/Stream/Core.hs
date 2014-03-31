@@ -47,3 +47,9 @@ instance (Arbitrary a) => Arbitrary (Stream a) where
               return $ testStream x y z
   where
    testStream x y z = Stream x (Stream y (Stream z $ testStream x y z))
+
+unfold :: (a -> b) -> (a -> a) -> a -> Stream b
+unfold f g s = Stream (f s) (unfold f g (g s))
+
+iterate :: (a -> a) -> a -> Stream a
+iterate f x = unfold id f x
