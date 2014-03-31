@@ -9,9 +9,14 @@ import Data.Stream.Hinze
 import Control.Applicative
 
 propPlusCommutative :: Stream Int -> Stream Int -> Bool
-propPlusCommutative xs ys = all (test (xs + ys) (ys + xs)) [0..100]
+propPlusCommutative xs ys = (xs + ys) `eq` (ys + xs)
  where
-  test vs ws n = (streamAt n vs) == (streamAt n ws)
+  eq = eqN 100
+
+propTimesCommutative :: Stream Int -> Stream Int -> Bool
+propTimesCommutative xs ys = (xs * ys) `eq` (ys * xs)
+ where
+  eq = eqN 100
 
 propPureConstant :: Int -> Bool
 propPureConstant x = all (test $ pure x) [1..100]
@@ -20,6 +25,7 @@ propPureConstant x = all (test $ pure x) [1..100]
 
 main = defaultMain tests
 
-tests = [testProperty "plus commutative" propPlusCommutative,
+tests = [testProperty "+ commutative" propPlusCommutative,
+         testProperty "* commutative" propTimesCommutative,
          testProperty "pure constant" propPureConstant
          ]

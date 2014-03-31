@@ -8,9 +8,14 @@ import Data.Stream.Core
 import Data.Stream.Rutten
 
 propPlusCommutative :: Stream Int -> Stream Int -> Bool
-propPlusCommutative xs ys = all (test (xs + ys) (ys + xs)) [0..100]
+propPlusCommutative xs ys = (xs + ys) `eq` (ys + xs)
  where
-  test vs ws n = (streamAt n vs) == (streamAt n ws)
+  eq = eqN 100
+
+propTimesCommutative :: Stream Int -> Stream Int -> Bool
+propTimesCommutative xs ys = (xs * ys) `eq` (ys * xs)
+ where
+  eq = eqN 100
 
 propFromIntegerFirstElem :: Integer -> Bool
 propFromIntegerFirstElem z = z == streamAt 0 (fromInteger z)
@@ -22,7 +27,8 @@ propFromIntegerLaterElems z = all (test $ fromInteger z) [1..100]
 
 main = defaultMain tests
 
-tests = [testProperty "plus commutative" propPlusCommutative,
+tests = [testProperty "+ commutative" propPlusCommutative,
+         testProperty "* commutative" propTimesCommutative,
          testProperty "first element of fromInteger equals the integer" propFromIntegerFirstElem,
          testProperty "later elements of fromInteger are zero" propFromIntegerLaterElems
          ]
