@@ -26,6 +26,10 @@ dropN :: Integer -> (Stream a) -> (Stream a)
 dropN 0 xs = xs
 dropN n xs = dropN (n - 1) (derivative xs)
 
+eqN :: (Eq a) => Integer -> Stream a -> Stream a -> Bool
+eqN 0 _ _ = True
+eqN n xs ys = (front xs == front ys) && eqN (n-1) xs ys
+
 constant :: a -> Stream a
 constant x = Stream x (constant x)
 

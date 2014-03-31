@@ -17,14 +17,14 @@ propMerge xs ys = all (test $ merge xs ys) [0..100]
   test zs n = streamAt (2 * n) zs == streamAt n xs && streamAt (2 * n + 1) zs == streamAt n ys
 
 propEvenMerge :: Stream Int -> Stream Int -> Bool
-propEvenMerge xs ys = all (test $ evens $ merge xs ys) [0..100]
+propEvenMerge xs ys = (evens $ merge xs ys) `eq` xs
  where
-  test zs n = streamAt n zs == streamAt n xs
+  eq = eqN 100
 
 propOddMerge :: Stream Int -> Stream Int -> Bool
-propOddMerge xs ys = all (test $ odds $ merge xs ys) [0..100]
+propOddMerge xs ys = (odds $ merge xs ys) `eq` ys
  where
-  test zs n = streamAt n zs == streamAt n ys
+  eq = eqN 100
 
 nats = Stream 0 (fmap (+1) nats)
 
