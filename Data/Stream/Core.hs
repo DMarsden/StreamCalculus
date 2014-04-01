@@ -10,10 +10,13 @@ streamAt 0 xs = front xs
 streamAt n xs = streamAt (n - 1) (derivative xs)
 
 merge :: Stream a -> Stream a -> Stream a
-merge xs ys = Stream (front xs) (merge ys (derivative xs))
+merge xs ys = unfold f g (xs,ys)
+ where
+  f (xs,ys) = front xs
+  g (xs,ys) = (ys, derivative xs)
 
 evens :: Stream a -> Stream a
-evens xs = Stream (front xs) (evens $ derivative $ derivative xs)
+evens xs = unfold front (derivative . derivative) xs
 
 odds :: Stream a -> Stream a
 odds = evens . derivative
