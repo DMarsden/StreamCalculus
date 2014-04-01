@@ -7,7 +7,11 @@ embed z = Stream z (embed 0)
 
 x = Stream 0 (embed 1)
 
-combine f xs ys = Stream (f (front xs) (front ys)) (combine f (derivative xs) (derivative ys))
+combine :: (a -> a -> a) -> Stream a -> Stream a -> Stream a
+combine f xs ys = unfold g h (xs,ys)
+ where
+  g (xs,ys) = f (front xs) (front ys)
+  h (xs,ys) = (derivative xs, derivative ys)
 
 (|*|) :: (Num a) => Stream a -> Stream a -> Stream a
 xs |*| ys = Stream (front xs * (front ys)) (((derivative xs) |*| ys) + ((embed $ front xs) |*| (derivative ys)))

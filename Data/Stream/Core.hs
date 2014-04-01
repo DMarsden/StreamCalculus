@@ -16,7 +16,7 @@ merge xs ys = unfold f g (xs,ys)
   g (xs,ys) = (ys, derivative xs)
 
 evens :: Stream a -> Stream a
-evens xs = unfold front (derivative . derivative) xs
+evens = unfold front (derivative . derivative)
 
 odds :: Stream a -> Stream a
 odds = evens . derivative
@@ -37,7 +37,7 @@ constant :: a -> Stream a
 constant x = Stream x (constant x)
 
 instance Functor Stream where
- fmap f xs = Stream (f $ front xs) (fmap f $ derivative xs)
+ fmap f = unfold (f . front) derivative
 
 instance (Show a) => Show (Stream a) where
  show xs = "[" ++ (concat $ intersperse ", " $ map show $ takeN 5 xs) ++ ", ..."
@@ -55,4 +55,4 @@ unfold :: (a -> b) -> (a -> a) -> a -> Stream b
 unfold f g s = Stream (f s) (unfold f g (g s))
 
 iterate :: (a -> a) -> a -> Stream a
-iterate f x = unfold id f x
+iterate f = unfold id f

@@ -51,5 +51,3 @@ instance (Floating a) => Floating (Stream a) where
  asinh xs = asinh <$> xs
  acosh xs = acosh <$> xs
  atanh xs = atanh <$> xs
-
-
