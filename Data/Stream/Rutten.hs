@@ -74,3 +74,9 @@ instance (Floating a) => Floating (Stream a) where
  asinh xs = fmap asinh xs
  acosh xs = fmap acosh xs
  atanh xs = fmap atanh xs
+
+shuffle :: (Num a) => Stream a -> Stream a -> Stream a
+shuffle xs ys = Stream (front xs * front ys) ((shuffle (derivative xs) ys) + (shuffle xs (derivative ys)))
+
+shuffleInv :: (Fractional a) => Stream a -> Stream a
+shuffleInv xs = Stream (recip $ front xs) (shuffle (-derivative xs) (shuffle (shuffleInv xs) (shuffleInv xs)))

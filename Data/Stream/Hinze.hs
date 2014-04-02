@@ -16,7 +16,9 @@ instance Comonad Stream where
  extend f xs = Stream (f xs) (extend f $ derivative xs)
 
 instance Applicative Stream where
- pure x = Stream x (pure x)
+ pure x = s 
+  where
+   s = Stream x s
  fs <*> xs = Stream (front fs (front xs)) ((derivative fs) <*> (derivative xs))
 
 instance (Num a) => Num (Stream a) where

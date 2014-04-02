@@ -34,7 +34,9 @@ eqN 0 _ _ = True
 eqN n xs ys = (front xs == front ys) && eqN (n-1) xs ys
 
 constant :: a -> Stream a
-constant x = Stream x (constant x)
+constant x = s 
+ where
+  s = Stream x s
 
 instance Functor Stream where
  fmap f = unfold (f . front) derivative
