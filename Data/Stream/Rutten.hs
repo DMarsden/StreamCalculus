@@ -3,7 +3,7 @@ module Data.Stream.Rutten where
 import Data.Stream.Core
 
 embed :: (Num a) => a -> Stream a
-embed z = Stream z (embed 0)
+embed z = Stream z (constant 0)
 
 x = Stream 0 (embed 1)
 
